@@ -1,6 +1,8 @@
 import {useCallback, useEffect, useState} from 'react';
 import {IDish, IDishesList} from '../../types.ts';
 import axiosApi from '../../axiosApi.ts';
+import DishCard from '../../components/dish-card/dish-card.tsx';
+import { CircularProgress } from '@mui/material';
 
 const Home = () => {
   const [dishes, setDishes] = useState<IDish[]>([]);
@@ -37,7 +39,13 @@ const Home = () => {
 
   return (
     <div>
-      Home page
+      {loading ? <CircularProgress /> : (
+        <>
+          {dishes.map(dish => (
+            <DishCard key={dish.id} dish={dish} />
+          ))}
+        </>
+      )}
     </div>
   );
 };
