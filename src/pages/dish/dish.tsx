@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { Box, Container, Typography, CircularProgress } from '@mui/material';
+import {useParams, useNavigate} from 'react-router';
+import { Box, Container, Typography, CircularProgress, Button } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import axiosApi from '../../axiosApi';
 import { IDish } from '../../types';
+import styles from './styles.module.css';
 
 const Dish = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [dish, setDish] = useState<IDish | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,9 +24,25 @@ const Dish = () => {
     };
 
     if (id) {
-      fetchDish();
+      void fetchDish();
     }
   }, [id]);
+
+  const handleDelete = async () => {
+    const isConfirmed = window.confirm('Вы уверены, что хотите удалить это блюдо?');
+
+    if (!isConfirmed) return;
+
+    try {
+      setLoading(true);
+      await axiosApi.delete(`/dishes/${id}.json`);
+      navigate('/');
+    } catch (error) {
+      console.error('Ошибка при удалении блюда:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -44,17 +63,27 @@ const Dish = () => {
   }
 
   return (
-    <Container maxWidth="md">
-      <Box py={4}>
+    <Container maxWidth="md" className={styles.wrapper}>
+      <Box >
         <Typography variant="h4" component="h1" gutterBottom>
-         Name: {dish.name}
+          Name: {dish.name}
         </Typography>
         <Typography variant="body1">
           Description: {dish.description}
         </Typography>
-         <Typography variant="body1" >
+        <Typography variant="body1" >
           Price: {dish.price} som
         </Typography>
+      </Box>
+      <Box className={styles.buttonWrapper}>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleDelete}
+          endIcon={<DeleteForeverIcon/>}
+        >
+          Delete dish
+        </Button>
       </Box>
     </Container>
   );

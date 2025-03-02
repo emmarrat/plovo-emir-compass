@@ -35,8 +35,6 @@ const Home = () => {
     void fetchDishes()
   }, [fetchDishes]);
 
-  console.log('dishes',dishes)
-
   return (
     <div>
       {loading ? <CircularProgress /> : (
