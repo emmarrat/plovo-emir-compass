@@ -4,7 +4,11 @@ import axiosApi from '../../axiosApi.ts';
 import DishCard from '../../components/dish-card/dish-card.tsx';
 import { CircularProgress } from '@mui/material';
 
-const Home = () => {
+interface Props {
+  handleAddDish: (dish: IDish) => void
+}
+
+const Home = ({handleAddDish}:Props) => {
   const [dishes, setDishes] = useState<IDish[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +44,7 @@ const Home = () => {
       {loading ? <CircularProgress /> : (
         <>
           {dishes.map(dish => (
-            <DishCard key={dish.id} dish={dish} />
+            <DishCard key={dish.id} dish={dish} handleAddDish={handleAddDish} />
           ))}
         </>
       )}
