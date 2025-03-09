@@ -38,3 +38,28 @@ export const addDishToBasket = (currentState: IBasketState, dish: IDish): IBaske
     totalPrice,
   }
 }
+
+export const syncBasketWithDishes = (currentState: IBasketState, dishes: IDish[]): IBasketState => {
+  const validItems = currentState.items.filter(item => {
+    return dishes.some(dish => dish.id === item.dish.id);
+  });
+
+  const updatedItems = validItems.map(item => {
+    const updatedDish = dishes.find(dish => dish.id === item.dish.id);
+    if (!updatedDish) return item;
+    return {
+      ...item,
+      dish: updatedDish
+    };
+  });
+
+  const totalCount = updatedItems.reduce((sum, item) => sum + item.count, 0);
+  const totalPrice = updatedItems.reduce((sum, item) => sum + (item.dish.price * item.count), 0);
+
+  return {
+    items: updatedItems,
+    totalCount,
+    totalPrice
+  };
+}
+

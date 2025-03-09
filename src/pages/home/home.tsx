@@ -6,9 +6,10 @@ import { CircularProgress } from '@mui/material';
 
 interface Props {
   handleAddDish: (dish: IDish) => void
+  handleSyncBasketWithDishes: (dishes: IDish[]) => void
 }
 
-const Home = ({handleAddDish}:Props) => {
+const Home = ({handleAddDish, handleSyncBasketWithDishes}:Props) => {
   const [dishes, setDishes] = useState<IDish[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +30,7 @@ const Home = ({handleAddDish}:Props) => {
         };
       });
       setDishes(newDishes);
+      handleSyncBasketWithDishes(newDishes);
     } finally {
       setLoading(false);
     }
