@@ -22,3 +22,11 @@ export interface IBasketState {
   totalPrice: number
   totalCount: number
 }
+
+export interface IOrder extends IBasketState {
+  orderInfo: {
+    name: string
+    phone: string
+    address: string
+  }
+}

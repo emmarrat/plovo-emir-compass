@@ -5,7 +5,7 @@ import Home from './pages/home/home.tsx';
 import Dish from './pages/dish/dish.tsx';
 import {useEffect, useState} from 'react';
 import {IBasketState, IDish} from './types.ts';
-import {addDishToBasket, syncBasketWithDishes, updateItemCountInBasket} from './utils/basketHelpers.ts';
+import {addDishToBasket, clearBasket, syncBasketWithDishes, updateItemCountInBasket} from './utils/basketHelpers.ts';
 import Basket from './pages/basket/basket.tsx';
 import {STORAGE_KEY} from './constants.ts';
 import CheckOut from './pages/check-out/check-out.tsx';
@@ -32,6 +32,12 @@ function App() {
     setBasketState(currentState => updateItemCountInBasket(currentState, dishId, newCount));
   };
 
+  const handleClearBasket = () => {
+    setBasketState(clearBasket);
+  };
+
+  
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(basketState));
   }, [basketState]);
@@ -47,7 +53,7 @@ function App() {
           <Route path="/add-dish" element={<AddDish />} />
           <Route path="/dish/:id" element={<Dish />} />
           <Route path="/basket" element={<Basket basketState={basketState} />} />
-          <Route path="/check-out" element={<CheckOut basketState={basketState} updateItemCount={updateItemCount} />} />
+          <Route path="/check-out" element={<CheckOut basketState={basketState} updateItemCount={updateItemCount} handleClearBasket={handleClearBasket} />} />
         </Routes>
       </div>
     </>

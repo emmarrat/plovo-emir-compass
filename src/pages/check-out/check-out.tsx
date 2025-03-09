@@ -1,23 +1,25 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Box, Container, Typography } from '@mui/material';
-import { IBasketState } from '../../types';
+import { IBasketState, IOrder } from '../../types';
 import OrderItems from '../../components/order-items/OrderItems';
 import OrderForm from '../../components/order-form/OrderForm';
-
+import axiosApi from '../../axiosApi';
 interface Props {
   basketState: IBasketState;
   updateItemCount: (dishId: string, newCount: number) => void;
+  handleClearBasket: () => void;
 }
-
-interface OrderForm {
+interface IOrderForm {
   name: string;
   phone: string;
   address: string;
 }
 
-const CheckOut = ({ basketState, updateItemCount }: Props) => {
-  const [formData, setFormData] = useState<OrderForm>({
-    name: '',
+const CheckOut = ({ basketState, updateItemCount, handleClearBasket }: Props) => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<IOrderForm>({
+    name: '', 
     phone: '',
     address: '',
   });
@@ -30,10 +32,20 @@ const CheckOut = ({ basketState, updateItemCount }: Props) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement order submission
-    console.log('Order submitted:', { items: basketState.items, ...formData });
+    try {
+      const order: IOrder = {
+        ...basketState,
+        orderInfo: formData,
+      };
+  
+      await axiosApi.post('/orders.json', order);
+      handleClearBasket();
+      navigate('/');
+    } catch (error) {
+      console.error('Error submitting order:', error);
+    }
   };
 
   return (

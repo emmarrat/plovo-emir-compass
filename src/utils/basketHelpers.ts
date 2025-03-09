@@ -85,3 +85,12 @@ export const updateItemCountInBasket = (currentState: IBasketState, dishId: stri
     totalPrice
   }
 }
+
+export const clearBasket = (): IBasketState => {
+  localStorage.removeItem('basket');
+  return {
+    items: [],
+    totalCount: 0,
+    totalPrice: 0
+  }
+}
