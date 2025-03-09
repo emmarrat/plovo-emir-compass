@@ -63,3 +63,25 @@ export const syncBasketWithDishes = (currentState: IBasketState, dishes: IDish[]
   };
 }
 
+export const updateItemCountInBasket = (currentState: IBasketState, dishId: string, newCount: number): IBasketState => {
+  const updatedItems = currentState.items
+    .map(item => {
+      if (item.dish.id === dishId) {
+        return {
+          ...item,
+          count: newCount
+        }
+      }
+      return item
+    })
+    .filter(item => item.count > 0);  
+
+  const totalCount = updatedItems.reduce((sum, item) => sum + item.count, 0)
+  const totalPrice = updatedItems.reduce((sum, item) => sum + (item.dish.price * item.count), 0)
+
+  return {
+    items: updatedItems,
+    totalCount,
+    totalPrice
+  }
+}

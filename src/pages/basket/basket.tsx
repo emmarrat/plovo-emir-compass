@@ -1,4 +1,4 @@
-import { Box, Container, Typography, List, ListItem, ListItemText, Divider, Link } from '@mui/material';
+import { Box, Container, Typography, List, ListItem, ListItemText, Divider, Link, Button } from '@mui/material';
 import { IBasketState } from '../../types';
 import { Link as RouterLink } from 'react-router';
 
@@ -62,6 +62,16 @@ const Basket = ({ basketState }: Props) => {
           <Typography variant="h5" sx={{ mt: 2 }}>
             Total price: {totalPrice} som
           </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            component={RouterLink}
+            to="/check-out"
+            sx={{ mt: 2 }}
+          >
+            Checkout
+          </Button>
         </Box>
       </Box>
     </Container>
